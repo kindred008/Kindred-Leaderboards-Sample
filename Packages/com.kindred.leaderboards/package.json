@@ -1,0 +1,15 @@
+{
+  "name": "com.kindred.leaderboards",
+  "version": "0.1.0",
+  "displayName": "Kindred Leaderboards",
+  "description": "This package can be used to access the Kindred Leaderboards web application.",
+  "unity": "2022.3",
+  "keywords": [
+    "leaderboards"
+  ],
+  "author": {
+    "name": "Kara",
+    "email": "kindredkara008@gmail.com",
+    "url": "https://github.com/kindred008"
+  }
+}
