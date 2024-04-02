@@ -35,12 +35,12 @@ public class PlayerPhysics : MonoBehaviour
             if (playerRb.velocity.y <= 0)
             {
                 playerRb.velocity = new Vector2(playerRb.velocity.x, bounceStrength);
-            }
 
-            var destructableHit = raycastHitArrayCollided.FirstOrDefault(x => x.collider.GetComponent<Destructable>() != null);
-            if (!destructableHit.Equals(default(RaycastHit2D)))
-            {
-                destructableHit.collider.GetComponent<Destructable>().Damage();
+                var destructableHit = raycastHitArrayCollided.FirstOrDefault(x => x.collider.GetComponent<Destructable>() != null);
+                if (!destructableHit.Equals(default(RaycastHit2D)))
+                {
+                    destructableHit.collider.GetComponent<Destructable>().Damage();
+                }
             }
         }
     }
