@@ -51,7 +51,9 @@ public class LevelGeneration : MonoBehaviour
                 var spawnWidth = screenWidth / 2f;
                 Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
 
-                while (Vector3.SqrMagnitude(lastSpawnedPosition - spawnPosition) > 50)
+                while (Vector3.SqrMagnitude(lastSpawnedPosition - spawnPosition) > 50 && 
+                    Vector3.SqrMagnitude(lastSpawnedPosition - new Vector3(screenWidth / 2f, spawnPosition.y)) + Vector3.Magnitude(new Vector3(-screenWidth / 2f, spawnPosition.y) - spawnPosition) > 50 &&
+                    Vector3.SqrMagnitude(lastSpawnedPosition - new Vector3(-screenWidth / 2f, spawnPosition.y)) + Vector3.Magnitude(new Vector3(screenWidth / 2f, spawnPosition.y) - spawnPosition) > 50)
                 {
                     spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
                 }
