@@ -40,11 +40,11 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public IEnumerator AddScoreToLeaderboard(int id, LeaderboardScoreDto score, string password)
+    public IEnumerator AddScoreToLeaderboard(int id, LeaderboardScore leaderboardScore, string password)
     {
         string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{id}";
-        string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={score.playerDto.playerUniqueIdentifier}&" +
-            $"PlayerDto.PlayerName={score.playerDto.playerName}&Score={score.score}";
+        string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={leaderboardScore.PlayerUniqueIdentifier}&" +
+            $"PlayerDto.PlayerName={leaderboardScore.PlayerName}&Score={leaderboardScore.Score}";
         string requestBody = "{\"password\":\"" + password + "\"}";
 
         UnityWebRequest request = UnityWebRequest.Post(url + scoreParams, requestBody, "application/json");
