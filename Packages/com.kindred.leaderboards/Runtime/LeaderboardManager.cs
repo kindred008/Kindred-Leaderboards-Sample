@@ -60,6 +60,33 @@ public class LeaderboardManager : MonoBehaviour
             Debug.Log("Scored added successfully");
         }
     }
+
+    public IEnumerator GetPlayersScoreFromLeaderboard(int id, string playerUniqueId, string password)
+    {
+        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscore/{id}";
+        string urlParams = $"?playerUniqueId={playerUniqueId}";
+        string requestBody = "{\"password\":\"" + password + "\"}";
+
+        UnityWebRequest request = UnityWebRequest.Post(url + urlParams, requestBody, "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Error: " + request.error);
+        }
+        else
+        {
+            string response = request.downloadHandler.text;
+            Debug.Log(response);
+
+            var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
+
+            Debug.Log(score.playerDto.playerName);
+            Debug.Log(score.playerDto.playerUniqueIdentifier);
+            Debug.Log(score.score);
+        }
+    }
 }
 
 [System.Serializable]
