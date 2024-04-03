@@ -14,6 +14,7 @@ public class LevelGeneration : MonoBehaviour
     private List<GameObject> spawnedPlatforms;
 
     private float lastSpawnedHeight;
+    private Vector3 lastSpawnedPosition;
 
     private Camera mainCamera;
 
@@ -50,12 +51,18 @@ public class LevelGeneration : MonoBehaviour
                 var spawnWidth = screenWidth / 2f;
                 Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
 
+                while (Vector3.SqrMagnitude(lastSpawnedPosition - spawnPosition) > 50)
+                {
+                    spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
+                }
+
                 var platformToSpawn = platforms[Random.Range(0, platforms.Length)];
                 var platform = Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
 
                 spawnedPlatforms.Add(platform);
 
                 lastSpawnedHeight = i;
+                lastSpawnedPosition = platform.gameObject.transform.position;
             }
         }
     }
