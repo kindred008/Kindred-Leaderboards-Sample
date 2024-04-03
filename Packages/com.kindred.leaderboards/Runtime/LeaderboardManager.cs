@@ -39,6 +39,27 @@ public class LeaderboardManager : MonoBehaviour
             }
         }
     }
+
+    public IEnumerator AddScoreToLeaderboard(int id, LeaderboardScoreDto score, string password)
+    {
+        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{id}";
+        string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={score.playerDto.playerUniqueIdentifier}&" +
+            $"PlayerDto.PlayerName={score.playerDto.playerName}&Score={score.score}";
+        string requestBody = "{\"password\":\"" + password + "\"}";
+
+        UnityWebRequest request = UnityWebRequest.Post(url + scoreParams, requestBody, "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Error: " + request.error);
+        }
+        else
+        {
+            Debug.Log("Scored added successfully");
+        }
+    }
 }
 
 [System.Serializable]
@@ -46,3 +67,4 @@ public class LeaderboardScoreWrapper
 {
     public LeaderboardScoreDto[] leaderboardScores;
 }
+ 
