@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private int moveSpeed = 5;
     [SerializeField] private float playerDeathOffset = 5f;
 
+    [SerializeField] private CameraControl cameraControlScript;
+
     private PlayerInput playerInput;
     private Rigidbody2D playerRb;
     private SpriteRenderer playerSprite;
@@ -36,11 +38,15 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameOver.AddListener(GameOver);
+        playerInput.actions["SpeedUpCamera"].performed += ctx => { cameraControlScript.speedMultiplierEnabled = true; };
+        playerInput.actions["SpeedUpCamera"].canceled += ctx => { cameraControlScript.speedMultiplierEnabled = false; };
     }
 
     private void OnDisable()
     {
         GameManager.OnGameOver.RemoveListener(GameOver);
+        playerInput.actions["SpeedUpCamera"].performed -= ctx => { cameraControlScript.speedMultiplierEnabled = true; };
+        playerInput.actions["SpeedUpCamera"].canceled -= ctx => { cameraControlScript.speedMultiplierEnabled = false; };
     }
 
     private void GameOver()
