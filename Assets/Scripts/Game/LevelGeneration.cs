@@ -37,39 +37,11 @@ public class LevelGeneration : MonoBehaviour
 
     private void Update()
     {
-        SpawnNewPlatforms2();
+        SpawnNewPlatforms();
         RemovePlatforms();
     }
 
     private void SpawnNewPlatforms()
-    {
-        if (lastSpawnedHeight - mainCamera.transform.position.y < spawnHeight)
-        {
-            var spawnToHeight = lastSpawnedHeight + spawnHeight;
-            for (float i = lastSpawnedHeight + platformSpacing; i < spawnToHeight; i += platformSpacing)
-            {
-                var spawnWidth = screenWidth / 2f;
-                Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
-
-                while (Vector3.SqrMagnitude(lastSpawnedPosition - spawnPosition) > 50 && 
-                    Vector3.SqrMagnitude(lastSpawnedPosition - new Vector3(spawnWidth, spawnPosition.y)) + Vector3.SqrMagnitude(new Vector3(-spawnWidth, spawnPosition.y) - spawnPosition) > 30 &&
-                    Vector3.SqrMagnitude(lastSpawnedPosition - new Vector3(-spawnWidth, spawnPosition.y)) + Vector3.SqrMagnitude(new Vector3(spawnWidth, spawnPosition.y) - spawnPosition) > 30)
-                {
-                    spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
-                }
-
-                var platformToSpawn = platforms[Random.Range(0, platforms.Length)];
-                var platform = Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
-
-                spawnedPlatforms.Add(platform);
-
-                lastSpawnedHeight = i;
-                lastSpawnedPosition = platform.gameObject.transform.position;
-            }
-        }
-    }
-
-    private void SpawnNewPlatforms2()
     {
         if (lastSpawnedHeight - mainCamera.transform.position.y < spawnHeight)
         {
