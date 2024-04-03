@@ -11,12 +11,19 @@ public class LevelGeneration : MonoBehaviour
     [SerializeField] private float spawnHeight = 10f;
     [SerializeField] private float platformSpacing = 2f;
 
+    private List<GameObject> spawnedPlatforms;
+
     private float lastSpawnedHeight;
 
     private Camera mainCamera;
 
     private float screenWidth;
     private float screenHeight;
+
+    private void Awake()
+    {
+        spawnedPlatforms = new List<GameObject>();
+    }
 
     private void Start()
     {
@@ -30,6 +37,7 @@ public class LevelGeneration : MonoBehaviour
     private void Update()
     {
         SpawnNewPlatforms();
+        RemovePlatforms();
     }
 
     private void SpawnNewPlatforms()
@@ -43,10 +51,23 @@ public class LevelGeneration : MonoBehaviour
                 Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), i);
 
                 var platformToSpawn = platforms[Random.Range(0, platforms.Length)];
-                Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
+                var platform = Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
+
+                spawnedPlatforms.Add(platform);
 
                 lastSpawnedHeight = i;
             }
+        }
+    }
+
+    private void RemovePlatforms()
+    {
+        var firstPlatform = spawnedPlatforms[0];
+
+        if (firstPlatform.transform.position.y < mainCamera.transform.position.y - (screenHeight / 2f))
+        {
+            spawnedPlatforms.Remove(firstPlatform);
+            Destroy(firstPlatform);
         }
     }
 }
