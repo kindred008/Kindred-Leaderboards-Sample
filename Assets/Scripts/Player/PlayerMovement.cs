@@ -9,11 +9,13 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private int moveSpeed = 5;
+    [SerializeField] private float playerDeathOffset = 5f;
 
     private PlayerInput playerInput;
     private Rigidbody2D playerRb;
     private SpriteRenderer playerSprite;
 
+    private Camera mainCamera;
     private float screenWidth;
     private float screenHeight;
 
@@ -26,9 +28,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        var mainCamera = Camera.main;
+        mainCamera = Camera.main;
         screenHeight = mainCamera.orthographicSize * 2f;
         screenWidth = screenHeight * mainCamera.aspect;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnGameOver.AddListener(GameOver);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameOver.RemoveListener(GameOver);
+    }
+
+    private void GameOver()
+    {
+        gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -48,12 +65,27 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        CheckScreenSwitch();
+        CheckPlayerFall();
+    }
+
+    private void CheckScreenSwitch()
+    {
         if (transform.position.x > screenWidth / 2f)
         {
             transform.position = new Vector3(-screenWidth / 2f, transform.position.y);
-        } else if (transform.position.x < -screenWidth / 2f)
+        }
+        else if (transform.position.x < -screenWidth / 2f)
         {
             transform.position = new Vector3(screenWidth / 2f, transform.position.y);
+        }
+    }
+
+    private void CheckPlayerFall()
+    {
+        if (transform.position.y + playerDeathOffset < mainCamera.transform.position.y - (screenHeight / 2f))
+        {
+            GameManager.OnGameOver.Invoke();
         }
     }
 }
