@@ -10,11 +10,11 @@ public class LeaderboardManager : MonoBehaviour
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
 
-    public IEnumerator GetScoresForLeaderboard(int id, string password)
+    public IEnumerator GetScoresForLeaderboard()
     {
-        UnityWebRequest request = new UnityWebRequest(kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscores/{id}", "POST");
+        UnityWebRequest request = new UnityWebRequest(kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscores/{leaderboardId}", "POST");
 
-        string requestBody = "{\"password\":\"" + password + "\"}";
+        string requestBody = "{\"password\":\"" + leaderboardPassword + "\"}";
         byte[] requestBodyByes = System.Text.Encoding.UTF8.GetBytes(requestBody);
 
         request.SetRequestHeader("Content-Type", "application/json");
@@ -40,12 +40,12 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public IEnumerator AddScoreToLeaderboard(int id, LeaderboardScore leaderboardScore, string password)
+    public IEnumerator AddScoreToLeaderboard(LeaderboardScore leaderboardScore)
     {
-        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{id}";
+        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{leaderboardId}";
         string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={leaderboardScore.PlayerUniqueIdentifier}&" +
             $"PlayerDto.PlayerName={leaderboardScore.PlayerName}&Score={leaderboardScore.Score}";
-        string requestBody = "{\"password\":\"" + password + "\"}";
+        string requestBody = "{\"password\":\"" + leaderboardPassword + "\"}";
 
         UnityWebRequest request = UnityWebRequest.Post(url + scoreParams, requestBody, "application/json");
 
@@ -69,11 +69,11 @@ public class LeaderboardManager : MonoBehaviour
         }
     }
 
-    public IEnumerator GetPlayersScoreFromLeaderboard(int id, string playerUniqueId, string password)
+    public IEnumerator GetPlayersScoreFromLeaderboard(string playerUniqueId)
     {
-        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscore/{id}";
+        string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscore/{leaderboardId}";
         string urlParams = $"?playerUniqueId={playerUniqueId}";
-        string requestBody = "{\"password\":\"" + password + "\"}";
+        string requestBody = "{\"password\":\"" + leaderboardPassword + "\"}";
 
         UnityWebRequest request = UnityWebRequest.Post(url + urlParams, requestBody, "application/json");
 
