@@ -11,11 +11,6 @@ public class LeaderboardManager : MonoBehaviour
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
 
-    private void Start()
-    {
-
-    }
-
     public void GetScoresForLeaderboard(Action<LeaderboardScoreDto[]> success, Action<string> failure)
     {
         StartCoroutine(GetScoresForLeaderboardCoroutine(success, failure));
