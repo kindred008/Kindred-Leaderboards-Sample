@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeaderboardScore : MonoBehaviour
+public class LeaderboardScore
 {
     public string PlayerUniqueIdentifier { get; set; }
     public string PlayerName { get; set; }

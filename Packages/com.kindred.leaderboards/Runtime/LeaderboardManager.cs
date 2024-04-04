@@ -57,7 +57,15 @@ public class LeaderboardManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Scored added successfully");
+            string response = request.downloadHandler.text;
+            Debug.Log(response);
+
+            var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
+
+            Debug.Log(score.playerDto.playerName);
+            Debug.Log(score.playerDto.playerUniqueIdentifier);
+            Debug.Log(score.score);
+            Debug.Log(score.leaderboardPosition);
         }
     }
 
@@ -85,6 +93,7 @@ public class LeaderboardManager : MonoBehaviour
             Debug.Log(score.playerDto.playerName);
             Debug.Log(score.playerDto.playerUniqueIdentifier);
             Debug.Log(score.score);
+            Debug.Log(score.leaderboardPosition);
         }
     }
 }

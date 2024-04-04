@@ -7,4 +7,5 @@ public class LeaderboardScoreDto
 {
     public PlayerDto playerDto;
     public int score;
+    public int leaderboardPosition;
 }
