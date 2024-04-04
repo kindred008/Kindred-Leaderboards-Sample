@@ -11,6 +11,9 @@ public class CameraControl : MonoBehaviour
     private float speedMultiplier = 2f;*/
 
     [SerializeField] Transform cameraTarget;
+    [SerializeField] float smoothSpeed = 0.5f;
+
+    private Vector3 currentPosition;
 
     private void OnEnable()
     {
@@ -35,9 +38,16 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (cameraTarget.position.y > transform.position.y)
+        if (cameraTarget.position.y + 0.5f > currentPosition.y)
         {
-            transform.position = new Vector3(transform.position.x, cameraTarget.position.y, transform.position.z);
+            currentPosition = new Vector3(transform.position.x, cameraTarget.position.y + 0.5f, transform.position.z);
+        }
+
+        transform.position = Vector3.Lerp(transform.position, currentPosition, smoothSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, currentPosition) < 0.05f)
+        {
+            transform.position = currentPosition;
         }
     }
 }
