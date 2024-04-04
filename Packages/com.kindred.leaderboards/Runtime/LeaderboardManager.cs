@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,17 @@ public class LeaderboardManager : MonoBehaviour
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
 
-    public IEnumerator GetScoresForLeaderboard()
+    private void Start()
+    {
+
+    }
+
+    public void GetScoresForLeaderboard(Action<LeaderboardScoreDto[]> success, Action<string> failure)
+    {
+        StartCoroutine(GetScoresForLeaderboardCoroutine(success, failure));
+    }
+
+    private IEnumerator GetScoresForLeaderboardCoroutine(Action<LeaderboardScoreDto[]> success, Action<string> failure)
     {
         UnityWebRequest request = new UnityWebRequest(kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscores/{leaderboardId}", "POST");
 
@@ -26,10 +37,13 @@ public class LeaderboardManager : MonoBehaviour
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Error: " + request.error);
+
+            var response = request.downloadHandler.text;
+
+            failure(response);
         } else
         {
             string response = request.downloadHandler.text;
-            Debug.Log(response);
 
             var scoresWrapper = JsonUtility.FromJson<LeaderboardScoreWrapper>("{\"leaderboardScores\":" + response + "}");
 
@@ -37,10 +51,18 @@ public class LeaderboardManager : MonoBehaviour
             {
                 Debug.Log(score.playerDto.playerName + ": " + score.score);
             }
+
+            var leaderboardScores = scoresWrapper.leaderboardScores;
+            success(leaderboardScores);
         }
     }
 
-    public IEnumerator AddScoreToLeaderboard(LeaderboardScore leaderboardScore)
+    public void AddScoreToLeaderboard(LeaderboardScore leaderboardScore, Action<LeaderboardScoreDto> success, Action<string> failure)
+    {
+        StartCoroutine(AddScoreToLeaderboardCoroutine(leaderboardScore, success, failure));
+    }
+
+    private IEnumerator AddScoreToLeaderboardCoroutine(LeaderboardScore leaderboardScore, Action<LeaderboardScoreDto> success, Action<string> failure)
     {
         string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{leaderboardId}";
         string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={leaderboardScore.PlayerUniqueIdentifier}&" +
@@ -54,6 +76,10 @@ public class LeaderboardManager : MonoBehaviour
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Error: " + request.error);
+
+            var response = request.downloadHandler.text;
+
+            failure(response);
         }
         else
         {
@@ -66,10 +92,17 @@ public class LeaderboardManager : MonoBehaviour
             Debug.Log(score.playerDto.playerUniqueIdentifier);
             Debug.Log(score.score);
             Debug.Log(score.leaderboardPosition);
+
+            success(score);
         }
     }
 
-    public IEnumerator GetPlayersScoreFromLeaderboard(string playerUniqueId)
+    public void GetPlayersScoreFromLeaderboard(string playerUniqueId, Action<LeaderboardScoreDto> success, Action<string> failure)
+    {
+        StartCoroutine(GetPlayersScoreFromLeaderboardCoroutine(playerUniqueId, success, failure));
+    }
+
+    private IEnumerator GetPlayersScoreFromLeaderboardCoroutine(string playerUniqueId, Action<LeaderboardScoreDto> success, Action<string> failure)
     {
         string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscore/{leaderboardId}";
         string urlParams = $"?playerUniqueId={playerUniqueId}";
@@ -82,6 +115,10 @@ public class LeaderboardManager : MonoBehaviour
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Error: " + request.error);
+
+            var response = request.downloadHandler.text;
+
+            failure(response);
         }
         else
         {
@@ -94,6 +131,8 @@ public class LeaderboardManager : MonoBehaviour
             Debug.Log(score.playerDto.playerUniqueIdentifier);
             Debug.Log(score.score);
             Debug.Log(score.leaderboardPosition);
+
+            success(score);
         }
     }
 }
