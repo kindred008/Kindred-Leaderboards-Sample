@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedMultiplierEnabled: 0
-  riseSpeed: 0.5
+  cameraTarget: {fileID: 1273059985}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +368,6 @@ GameObject:
   - component: {fileID: 873784288}
   - component: {fileID: 873784287}
   - component: {fileID: 873784289}
-  - component: {fileID: 873784290}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -423,20 +422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607ca8dce9336f542ae74d687e28e9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &873784290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 873784286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e84cb6593c011d438475b5cf780e3db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leaderboardId: 0
-  leaderboardPassword: 
 --- !u!1 &1042667254
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,6 +552,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2106954545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1273059985 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 140746085627749328, guid: 31f8daa06a74ef644acdc5a4786bb550, type: 3}
+  m_PrefabInstance: {fileID: 1182039303414108741}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2106954544
 GameObject:
   m_ObjectHideFlags: 0

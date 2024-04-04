@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    public bool speedMultiplierEnabled = false;
+    /*public bool speedMultiplierEnabled = false;
 
-    [SerializeField] float riseSpeed = 1f;
+    [SerializeField] float riseSpeed = 0.5f;
 
-    private float speedMultiplier = 2f;
+    private float speedMultiplier = 2f;*/
+
+    [SerializeField] Transform cameraTarget;
 
     private void OnEnable()
     {
@@ -27,7 +29,15 @@ public class CameraControl : MonoBehaviour
 
     private void Update()
     {
-        var speed = speedMultiplierEnabled ? riseSpeed * speedMultiplier : riseSpeed;
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        /*var speed = speedMultiplierEnabled ? riseSpeed * speedMultiplier : riseSpeed;
+        transform.Translate(Vector3.up * speed * Time.deltaTime);*/
+    }
+
+    private void LateUpdate()
+    {
+        if (cameraTarget.position.y > transform.position.y)
+        {
+            transform.position = new Vector3(transform.position.x, cameraTarget.position.y, transform.position.z);
+        }
     }
 }
