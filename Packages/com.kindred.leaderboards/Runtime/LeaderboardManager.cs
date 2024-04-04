@@ -42,11 +42,6 @@ public class LeaderboardManager : MonoBehaviour
 
             var scoresWrapper = JsonUtility.FromJson<LeaderboardScoreWrapper>("{\"leaderboardScores\":" + response + "}");
 
-            foreach (LeaderboardScoreDto score in scoresWrapper.leaderboardScores)
-            {
-                Debug.Log(score.playerDto.playerName + ": " + score.score);
-            }
-
             var leaderboardScores = scoresWrapper.leaderboardScores;
             success(leaderboardScores);
         }
@@ -79,14 +74,8 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             string response = request.downloadHandler.text;
-            Debug.Log(response);
 
             var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
-
-            Debug.Log(score.playerDto.playerName);
-            Debug.Log(score.playerDto.playerUniqueIdentifier);
-            Debug.Log(score.score);
-            Debug.Log(score.leaderboardPosition);
 
             success(score);
         }
@@ -118,14 +107,8 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             string response = request.downloadHandler.text;
-            Debug.Log(response);
 
             var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
-
-            Debug.Log(score.playerDto.playerName);
-            Debug.Log(score.playerDto.playerUniqueIdentifier);
-            Debug.Log(score.score);
-            Debug.Log(score.leaderboardPosition);
 
             success(score);
         }
