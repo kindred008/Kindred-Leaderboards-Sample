@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
                 var rank = success.leaderboardPosition;
                 gameOverMessage.text = "Well done! You placed " + rank + GetRankSuffix(rank);
             },
-            failure => { Debug.LogError("Something went wrong"); }
+            failure => { Debug.LogError(failure); }
         );
     }
 

@@ -35,8 +35,11 @@ public class LeaderboardManager : MonoBehaviour
 
             var response = request.downloadHandler.text;
 
-            failure(response);
-        } else
+            var failureMessage = string.IsNullOrEmpty(response) ? request.error : response;
+
+            failure(failureMessage);
+        } 
+        else
         {
             string response = request.downloadHandler.text;
 
@@ -65,11 +68,11 @@ public class LeaderboardManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error: " + request.error);
-
             var response = request.downloadHandler.text;
 
-            failure(response);
+            var failureMessage = string.IsNullOrEmpty(response) ? request.error : response;
+
+            failure(failureMessage);
         }
         else
         {
@@ -98,11 +101,11 @@ public class LeaderboardManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error: " + request.error);
-
             var response = request.downloadHandler.text;
 
-            failure(response);
+            var failureMessage = string.IsNullOrEmpty(response) ? request.error : response;
+
+            failure(failureMessage);
         }
         else
         {
