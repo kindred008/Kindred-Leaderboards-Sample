@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         leaderboardManager.AddScoreToLeaderboard(leaderboardScore,
             success => {
                 gameOverMessage.gameObject.SetActive(true);
-                var rank = success.leaderboardPosition;
+                var rank = success.LeaderboardPosition;
                 gameOverMessage.text = "Well done! You placed " + rank + GetRankSuffix(rank);
             },
             failure => { Debug.LogError(failure); }
