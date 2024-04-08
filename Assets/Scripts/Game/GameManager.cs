@@ -5,6 +5,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,6 +36,11 @@ public class GameManager : MonoBehaviour
 
     private int score = 0;
     private float trackScoreStartingY;
+
+    public void ExitToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
 
     private void Start()
     {
