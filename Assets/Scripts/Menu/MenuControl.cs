@@ -12,11 +12,23 @@ public class MenuControl : MonoBehaviour
     [SerializeField] private GameObject scorePanel;
     [SerializeField] private GameObject topScorePanel;
     [SerializeField] private GameObject topScorePrefab;
+    [SerializeField] private Button playNavButton;
     [SerializeField] private Button scoreNavButton;
+    [SerializeField] private TMP_InputField nameInputField;
 
     [Header("Players Score")]
     [SerializeField] private GameObject myTopScorePanel;
     [SerializeField] private TextMeshProUGUI myTopScoreText;
+
+    public void UpdateName(string playerName)
+    {
+        if (!string.IsNullOrEmpty(playerName))
+        {
+            nameInputField.text = playerName;
+            PlayerPrefs.SetString("PlayerName", playerName);
+            playNavButton.interactable = true;
+        }
+    }
 
     public void LoadScene(string sceneName)
     {
@@ -37,6 +49,11 @@ public class MenuControl : MonoBehaviour
 
     private void Start()
     {
+        if (PlayerPrefs.HasKey("PlayerName"))
+        {
+            UpdateName(PlayerPrefs.GetString("PlayerName"));
+        }
+
         LoadScores();
     }
 

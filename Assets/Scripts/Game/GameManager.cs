@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         LeaderboardScore leaderboardScore = new LeaderboardScore()
         {
             PlayerUniqueIdentifier = LeaderboardManager.Instance.GetPlayersUniqueID(),
-            PlayerName = "Player",
+            PlayerName = PlayerPrefs.GetString("PlayerName"),
             Score = score,
         };
 
