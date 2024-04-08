@@ -9,7 +9,7 @@ public class LeaderboardManager : MonoBehaviour
 {
     public static LeaderboardManager Instance { get; private set; }
 
-    [SerializeField] private bool dontDestroyOnLoad;
+    [SerializeField] private bool dontDestroyOnLoad = true;
 
     [Header("Leaderboard Connection Details")]
     [SerializeField] private int leaderboardId;
