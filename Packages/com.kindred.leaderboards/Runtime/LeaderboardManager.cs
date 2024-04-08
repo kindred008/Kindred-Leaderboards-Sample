@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,12 +12,12 @@ public class LeaderboardManager : MonoBehaviour
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
 
-    public void GetScoresForLeaderboard(Action<LeaderboardScoreDto[]> success, Action<string> failure)
+    public void GetScoresForLeaderboard(Action<LeaderboardScore[]> success, Action<string> failure)
     {
         StartCoroutine(GetScoresForLeaderboardCoroutine(success, failure));
     }
 
-    private IEnumerator GetScoresForLeaderboardCoroutine(Action<LeaderboardScoreDto[]> success, Action<string> failure)
+    private IEnumerator GetScoresForLeaderboardCoroutine(Action<LeaderboardScore[]> success, Action<string> failure)
     {
         UnityWebRequest request = new UnityWebRequest(kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscores/{leaderboardId}", "POST");
 
@@ -31,8 +32,6 @@ public class LeaderboardManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Error: " + request.error);
-
             var response = request.downloadHandler.text;
 
             var failureMessage = string.IsNullOrEmpty(response) ? request.error : response;
@@ -46,16 +45,17 @@ public class LeaderboardManager : MonoBehaviour
             var scoresWrapper = JsonUtility.FromJson<LeaderboardScoreWrapper>("{\"leaderboardScores\":" + response + "}");
 
             var leaderboardScores = scoresWrapper.leaderboardScores;
-            success(leaderboardScores);
+
+            success(leaderboardScores.Select(scoreDto => LeaderboardScore.FromDto(scoreDto)).ToArray());
         }
     }
 
-    public void AddScoreToLeaderboard(LeaderboardScore leaderboardScore, Action<LeaderboardScoreDto> success, Action<string> failure)
+    public void AddScoreToLeaderboard(LeaderboardScore leaderboardScore, Action<LeaderboardScore> success, Action<string> failure)
     {
         StartCoroutine(AddScoreToLeaderboardCoroutine(leaderboardScore, success, failure));
     }
 
-    private IEnumerator AddScoreToLeaderboardCoroutine(LeaderboardScore leaderboardScore, Action<LeaderboardScoreDto> success, Action<string> failure)
+    private IEnumerator AddScoreToLeaderboardCoroutine(LeaderboardScore leaderboardScore, Action<LeaderboardScore> success, Action<string> failure)
     {
         string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/addscore/{leaderboardId}";
         string scoreParams = $"?PlayerDto.PlayerUniqueIdentifier={leaderboardScore.PlayerUniqueIdentifier}&" +
@@ -80,16 +80,16 @@ public class LeaderboardManager : MonoBehaviour
 
             var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
 
-            success(score);
+            success(LeaderboardScore.FromDto(score));
         }
     }
 
-    public void GetPlayersScoreFromLeaderboard(string playerUniqueId, Action<LeaderboardScoreDto> success, Action<string> failure)
+    public void GetPlayersScoreFromLeaderboard(string playerUniqueId, Action<LeaderboardScore> success, Action<string> failure)
     {
         StartCoroutine(GetPlayersScoreFromLeaderboardCoroutine(playerUniqueId, success, failure));
     }
 
-    private IEnumerator GetPlayersScoreFromLeaderboardCoroutine(string playerUniqueId, Action<LeaderboardScoreDto> success, Action<string> failure)
+    private IEnumerator GetPlayersScoreFromLeaderboardCoroutine(string playerUniqueId, Action<LeaderboardScore> success, Action<string> failure)
     {
         string url = kindredLeaderboardsBaseUrl + $"/LeaderboardScore/external/getscore/{leaderboardId}";
         string urlParams = $"?playerUniqueId={playerUniqueId}";
@@ -113,7 +113,7 @@ public class LeaderboardManager : MonoBehaviour
 
             var score = JsonUtility.FromJson<LeaderboardScoreDto>(response);
 
-            success(score);
+            success(LeaderboardScore.FromDto(score));
         }
     }
 }
