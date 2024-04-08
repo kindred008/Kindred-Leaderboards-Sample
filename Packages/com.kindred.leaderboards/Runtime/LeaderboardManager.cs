@@ -12,6 +12,22 @@ public class LeaderboardManager : MonoBehaviour
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
 
+    public string GetPlayersUniqueID()
+    {
+        string playerID;
+        if (PlayerPrefs.HasKey("PlayerID"))
+        {
+            playerID = PlayerPrefs.GetString("PlayerID");
+        }
+        else
+        {
+            playerID = Guid.NewGuid().ToString();
+            PlayerPrefs.SetString("PlayerID", playerID);
+        }
+
+        return playerID;
+    }
+
     public void GetScoresForLeaderboard(Action<LeaderboardScore[]> success, Action<string> failure)
     {
         StartCoroutine(GetScoresForLeaderboardCoroutine(success, failure));
