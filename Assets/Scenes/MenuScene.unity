@@ -363,7 +363,6 @@ MonoBehaviour:
   topScorePanel: {fileID: 823555868}
   topScorePrefab: {fileID: 3493029940413183306, guid: 3248ec5eb853e6e478da0735c1516b6a, type: 3}
   scoreNavButton: {fileID: 1599287852}
-  leaderboardManager: {fileID: 394901509}
   myTopScorePanel: {fileID: 309173838}
   myTopScoreText: {fileID: 117891285}
 --- !u!4 &113045320
@@ -1013,6 +1012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e84cb6593c011d438475b5cf780e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
   leaderboardId: 27
   leaderboardPassword: Password123
 --- !u!4 &394901510

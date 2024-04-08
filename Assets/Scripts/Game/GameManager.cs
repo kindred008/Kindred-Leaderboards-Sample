@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverScoreText;
     [SerializeField] private TextMeshProUGUI gameOverMessage;
 
-    [SerializeField] private LeaderboardManager leaderboardManager;
-
     public int Score
     {
         get { return score; }
@@ -70,12 +68,12 @@ public class GameManager : MonoBehaviour
 
         LeaderboardScore leaderboardScore = new LeaderboardScore()
         {
-            PlayerUniqueIdentifier = Guid.NewGuid().ToString(),
+            PlayerUniqueIdentifier = LeaderboardManager.Instance.GetPlayersUniqueID(),
             PlayerName = "Player",
             Score = score,
         };
 
-        leaderboardManager.AddScoreToLeaderboard(leaderboardScore,
+        LeaderboardManager.Instance.AddScoreToLeaderboard(leaderboardScore,
             success => {
                 gameOverMessage.gameObject.SetActive(true);
                 var rank = success.LeaderboardPosition;

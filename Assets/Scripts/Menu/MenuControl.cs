@@ -13,7 +13,6 @@ public class MenuControl : MonoBehaviour
     [SerializeField] private GameObject topScorePanel;
     [SerializeField] private GameObject topScorePrefab;
     [SerializeField] private Button scoreNavButton;
-    [SerializeField] private LeaderboardManager leaderboardManager;
 
     [Header("Players Score")]
     [SerializeField] private GameObject myTopScorePanel;
@@ -43,7 +42,7 @@ public class MenuControl : MonoBehaviour
 
     private void LoadScores()
     {
-        leaderboardManager.GetScoresForLeaderboard
+        LeaderboardManager.Instance.GetScoresForLeaderboard
             (
                 scores =>
                 {
@@ -64,7 +63,7 @@ public class MenuControl : MonoBehaviour
                     Debug.LogError(failure);
                 }
             );
-        leaderboardManager.GetPlayersScoreFromLeaderboard(leaderboardManager.GetPlayersUniqueID(),
+        LeaderboardManager.Instance.GetPlayersScoreFromLeaderboard(LeaderboardManager.Instance.GetPlayersUniqueID(),
                 score =>
                 {
                     myTopScoreText.text = score.Score.ToString();

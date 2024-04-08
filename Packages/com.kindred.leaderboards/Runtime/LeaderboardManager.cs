@@ -7,10 +7,29 @@ using UnityEngine.Networking;
 
 public class LeaderboardManager : MonoBehaviour
 {
+    public static LeaderboardManager Instance { get; private set; }
+
+    [SerializeField] private bool dontDestroyOnLoad;
+
+    [Header("Leaderboard Connection Details")]
     [SerializeField] private int leaderboardId;
     [SerializeField] private string leaderboardPassword;
 
     private string kindredLeaderboardsBaseUrl = "https://localhost:8081/api";
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        } else
+        {
+            Instance = this;
+
+            if (dontDestroyOnLoad)
+                DontDestroyOnLoad(gameObject);
+        }
+    }
 
     public string GetPlayersUniqueID()
     {
