@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +14,10 @@ public class MenuControl : MonoBehaviour
     [SerializeField] private GameObject topScorePrefab;
     [SerializeField] private Button scoreNavButton;
     [SerializeField] private LeaderboardManager leaderboardManager;
+
+    [Header("Players Score")]
+    [SerializeField] private GameObject myTopScorePanel;
+    [SerializeField] private TextMeshProUGUI myTopScoreText;
 
     public void LoadScene(string sceneName)
     {
@@ -56,7 +61,18 @@ public class MenuControl : MonoBehaviour
                 },
                 failure =>
                 {
-                    Debug.LogError("Failed to load scores");
+                    Debug.LogError(failure);
+                }
+            );
+        leaderboardManager.GetPlayersScoreFromLeaderboard(leaderboardManager.GetPlayersUniqueID(),
+                score =>
+                {
+                    myTopScoreText.text = score.Score.ToString();
+                    topScorePanel.SetActive(true);
+                },
+                failure =>
+                {
+                    Debug.LogError(failure);
                 }
             );
     }

@@ -46,7 +46,6 @@ public class TopScore : MonoBehaviour
 
     private void UpdateText()
     {
-        Debug.Log(playerName);
         if (initialized)
             scoreText.text = $"{playerName} - {playerScore}";
     }
