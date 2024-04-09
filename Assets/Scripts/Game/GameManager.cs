@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static UnityEvent OnGameOver = new UnityEvent();
+    public static UnityEvent<int> OnScoreChanged = new UnityEvent<int>();
 
     public bool IsGameOver { get; private set; }
 
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
             {
                 score = value;
                 scoreText.text = "Score: " + score;
+                OnScoreChanged.Invoke(score);
             }
         }
     }

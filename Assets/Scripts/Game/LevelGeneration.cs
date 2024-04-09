@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGeneration : MonoBehaviour
@@ -32,6 +33,16 @@ public class LevelGeneration : MonoBehaviour
         mainCamera = Camera.main;
         screenHeight = mainCamera.orthographicSize * 2f;
         screenWidth = screenHeight * mainCamera.aspect;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnScoreChanged.AddListener(IncreasePlatformSpawnChances);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnScoreChanged.RemoveListener(IncreasePlatformSpawnChances);
     }
 
     private void Update()
@@ -106,6 +117,19 @@ public class LevelGeneration : MonoBehaviour
             Destroy(firstPlatform);
         }
     }
+
+    private void IncreasePlatformSpawnChances(int score)
+    {
+        for (int i = 0; i < platforms.Length; i++)
+        {
+            var platform = platforms[i];
+            if (score % platform.increaseSpawnChance == 0 && platform.increaseSpawnChance != -1 && (platform.maxSpawnChance == -1 || platform.spawnChance < platform.maxSpawnChance))
+            {
+                platforms[i].spawnChance++;
+                Debug.Log("Increased spawn chance for " + platform.platformPrefab.name);
+            }
+        }
+    }
 }
 
 [System.Serializable]
@@ -113,4 +137,6 @@ public struct Platform
 {
     public GameObject platformPrefab;
     public int spawnChance;
+    public int increaseSpawnChance;
+    public int maxSpawnChance;
 }
