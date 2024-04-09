@@ -1776,6 +1776,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2726866144254130580, guid: 31f8daa06a74ef644acdc5a4786bb550, type: 3}
+      propertyPath: playerDeathOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2726866144254130580, guid: 31f8daa06a74ef644acdc5a4786bb550, type: 3}
       propertyPath: cameraControlScript
       value: 
       objectReference: {fileID: 519420033}
