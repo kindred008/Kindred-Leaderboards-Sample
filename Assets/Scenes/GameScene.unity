@@ -1020,6 +1020,7 @@ MonoBehaviour:
   - {fileID: 2420482583586064848, guid: 4f551cf50432fe24b9ff651a0544c608, type: 3}
   - {fileID: 2420482583586064848, guid: 4f551cf50432fe24b9ff651a0544c608, type: 3}
   - {fileID: 935016685917419838, guid: 4f7f9ed27ad2381468a2d98a5b0d7e3a, type: 3}
+  - {fileID: 473047384809824713, guid: 8101e24cd5b58fc4590255852dcaf3be, type: 3}
   ground: {fileID: 1042667254}
   spawnHeight: 10
   platformSpacing: 2
