@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverScoreText;
     [SerializeField] private TextMeshProUGUI gameOverMessage;
 
+    private LeaderboardScore highScore = null;
+
     public int Score
     {
         get { return score; }
@@ -45,6 +47,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         trackScoreStartingY = trackScoreTransform.position.y;
+
+        LeaderboardManager.Instance.GetPlayersScoreFromLeaderboard(PlayerPrefs.GetString("PlayerID"), 
+            playerScore =>
+            {
+                highScore = playerScore;
+            }, 
+            failureMessage =>
+            {
+                Debug.LogError(failureMessage);
+            }
+        );
     }
 
     private void Update()
@@ -79,14 +92,21 @@ public class GameManager : MonoBehaviour
             Score = score,
         };
 
-        LeaderboardManager.Instance.AddScoreToLeaderboard(leaderboardScore,
-            success => {
-                gameOverMessage.gameObject.SetActive(true);
-                var rank = success.LeaderboardPosition;
-                gameOverMessage.text = "Well done! You placed " + rank + GetRankSuffix(rank);
-            },
-            failure => { Debug.LogError(failure); }
-        );
+        if ((highScore != null && leaderboardScore.Score > highScore.Score) || highScore == null)
+        {
+            LeaderboardManager.Instance.AddScoreToLeaderboard(leaderboardScore,
+                success => {
+                    gameOverMessage.gameObject.SetActive(true);
+                    var rank = success.LeaderboardPosition;
+                    gameOverMessage.text = "Well done! You placed " + rank + GetRankSuffix(rank);
+                },
+                failure => { Debug.LogError(failure); }
+            );
+        }  else if (highScore != null && leaderboardScore.Score < highScore.Score)
+        {
+            gameOverMessage.gameObject.SetActive(true);
+            gameOverMessage.text = $"You failed to beat your high score of {highScore.Score}!";
+        }
     }
 
     private string GetRankSuffix(int rank)
