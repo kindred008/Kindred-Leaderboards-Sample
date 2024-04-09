@@ -84,7 +84,7 @@ public class MenuControl : MonoBehaviour
                 score =>
                 {
                     myTopScoreText.text = score.Score.ToString();
-                    topScorePanel.SetActive(true);
+                    myTopScorePanel.SetActive(true);
                 },
                 failure =>
                 {
