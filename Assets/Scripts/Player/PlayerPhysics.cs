@@ -34,6 +34,14 @@ public class PlayerPhysics : MonoBehaviour
         {
             if (playerRb.velocity.y <= 0)
             {
+                foreach (var ray in raycastHitArrayCollided)
+                {
+                    if (ray.collider.CompareTag("GroundTrap"))
+                    {
+                        GameManager.OnGameOver.Invoke();
+                    }
+                }
+
                 playerRb.velocity = new Vector2(playerRb.velocity.x, bounceStrength);
 
                 var destructableHit = raycastHitArrayCollided.FirstOrDefault(x => x.collider.GetComponent<Destructable>() != null);
@@ -42,14 +50,6 @@ public class PlayerPhysics : MonoBehaviour
                     destructableHit.collider.GetComponent<Destructable>().Damage();
                 }
             }
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Trap"))
-        {
-            GameManager.OnGameOver.Invoke();
         }
     }
 }
