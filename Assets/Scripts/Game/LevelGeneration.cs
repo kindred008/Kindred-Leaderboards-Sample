@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGeneration : MonoBehaviour
 {
     [SerializeField] private Platform[] platforms;
-    [SerializeField] private GameObject[] traps;
+    [SerializeField] private Platform[] traps;
     [SerializeField] private GameObject ground;
 
     [SerializeField] private float spawnHeight = 10f;
     [SerializeField] private float platformSpacing = 2f;
     [SerializeField] private float platformDestroyOffset = 1f;
+
+    [Header("Trap config")]
     [SerializeField] private int trapSpawnChance = 1;
+    [SerializeField] private int trapIncreaseSpawnChance = 20;
+    [SerializeField] private int trapMaxSpawnChance = 50;
 
     private List<GameObject> spawnedPlatforms;
 
@@ -40,12 +45,12 @@ public class LevelGeneration : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnScoreChanged.AddListener(IncreasePlatformSpawnChances);
+        GameManager.OnScoreChanged.AddListener(IncreaseSpawnChances);
     }
 
     private void OnDisable()
     {
-        GameManager.OnScoreChanged.RemoveListener(IncreasePlatformSpawnChances);
+        GameManager.OnScoreChanged.RemoveListener(IncreaseSpawnChances);
     }
 
     private void Update()
@@ -122,9 +127,29 @@ public class LevelGeneration : MonoBehaviour
             var spawnWidth = screenWidth / 2f;
             Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), spawnY);
 
-            var trapIndex = Random.Range(0, traps.Length);
+            var trapsTotalSpawnChance = 0;
+            foreach (var trapStruct in traps)
+            {
+                trapsTotalSpawnChance += trapStruct.spawnChance;
+            }
 
-            Instantiate(traps[trapIndex], spawnPosition, Quaternion.identity);
+            var randomTrapNumber = Random.Range(1, trapsTotalSpawnChance + 1);
+            GameObject trapToSpawn;
+
+            foreach (var trapStruct in traps)
+            {
+                if (randomTrapNumber <= trapStruct.spawnChance)
+                {
+                    trapToSpawn = trapStruct.platformPrefab;
+
+                    var trap = Instantiate(trapToSpawn, spawnPosition, Quaternion.identity);
+
+                    spawnedPlatforms.Add(trap);
+                } else
+                {
+                    randomTrapNumber -= trapStruct.spawnChance;
+                }
+            }
         }
     }
 
@@ -140,7 +165,7 @@ public class LevelGeneration : MonoBehaviour
         }
     }
 
-    private void IncreasePlatformSpawnChances(int score)
+    private void IncreaseSpawnChances(int score)
     {
         for (int i = 0; i < platforms.Length; i++)
         {
@@ -148,8 +173,21 @@ public class LevelGeneration : MonoBehaviour
             if (score % platform.increaseSpawnChance == 0 && platform.increaseSpawnChance != -1 && (platform.maxSpawnChance == -1 || platform.spawnChance < platform.maxSpawnChance))
             {
                 platforms[i].spawnChance++;
-                Debug.Log("Increased spawn chance for " + platform.platformPrefab.name);
             }
+        }
+
+        for (int i = 0; i < traps.Length; i++)
+        {
+            var trap = traps[i];
+            if (score % trap.increaseSpawnChance == 0 && trap.increaseSpawnChance != -1 && (trap.maxSpawnChance == -1 || trap.spawnChance < trap.maxSpawnChance))
+            {
+                traps[i].spawnChance++;
+            }
+        }
+
+        if (score % trapIncreaseSpawnChance == 0 && trapIncreaseSpawnChance != -1 && (trapMaxSpawnChance == -1 || trapSpawnChance < trapMaxSpawnChance))
+        {
+            trapSpawnChance++;
         }
     }
 }

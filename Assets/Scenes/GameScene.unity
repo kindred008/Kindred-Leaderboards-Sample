@@ -973,11 +973,17 @@ MonoBehaviour:
     increaseSpawnChance: 50
     maxSpawnChance: 3
   traps:
-  - {fileID: 5535625513195004686, guid: cfadc1b5fb572f84298b9da3df9cc809, type: 3}
+  - platformPrefab: {fileID: 5535625513195004686, guid: cfadc1b5fb572f84298b9da3df9cc809, type: 3}
+    spawnChance: 1
+    increaseSpawnChance: -1
+    maxSpawnChance: -1
   ground: {fileID: 1042667254}
   spawnHeight: 10
   platformSpacing: 2
   platformDestroyOffset: 2
+  trapSpawnChance: 0
+  trapIncreaseSpawnChance: 15
+  trapMaxSpawnChance: 50
 --- !u!4 &873784288
 Transform:
   m_ObjectHideFlags: 0
