@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelGeneration : MonoBehaviour
 {
-    [SerializeField] private GameObject[] platforms;
+    [SerializeField] private Platform[] platforms;
     [SerializeField] private GameObject ground;
 
     [SerializeField] private float spawnHeight = 10f;
@@ -61,15 +60,37 @@ public class LevelGeneration : MonoBehaviour
                     spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), spawnY);
                 }
 
-                var platformToSpawn = platforms[Random.Range(0, platforms.Length)];
-                var platform = Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
+                var platformsTotalSpawnChance = 0;
+                foreach (var platformStruct in platforms)
+                {
+                    platformsTotalSpawnChance += platformStruct.spawnChance;
+                }
 
-                spawnedPlatforms.Add(platform);
+                var randomPlatformNumber = Random.Range(1, platformsTotalSpawnChance + 1);
+                GameObject platformToSpawn;
 
-                i = lastSpawnedHeight = spawnY;
-                lastSpawnedPosition = platform.gameObject.transform.position;
+                foreach (var platformStruct in platforms)
+                {
+                    if (randomPlatformNumber <= platformStruct.spawnChance)
+                    {
+                        platformToSpawn = platformStruct.platformPrefab;
 
-                i += platformSpacing;
+                        var platform = Instantiate(platformToSpawn, spawnPosition, Quaternion.identity);
+
+                        spawnedPlatforms.Add(platform);
+
+                        i = lastSpawnedHeight = spawnY;
+                        lastSpawnedPosition = platform.gameObject.transform.position;
+
+                        i += platformSpacing;
+
+                        break;
+                    } 
+                    else
+                    {
+                        randomPlatformNumber -= platformStruct.spawnChance;
+                    }
+                }
             }
         }
     }
@@ -85,4 +106,11 @@ public class LevelGeneration : MonoBehaviour
             Destroy(firstPlatform);
         }
     }
+}
+
+[System.Serializable]
+public struct Platform
+{
+    public GameObject platformPrefab;
+    public int spawnChance;
 }
