@@ -44,4 +44,12 @@ public class PlayerPhysics : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Trap"))
+        {
+            GameManager.OnGameOver.Invoke();
+        }
+    }
 }
