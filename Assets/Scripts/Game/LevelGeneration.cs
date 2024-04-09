@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class LevelGeneration : MonoBehaviour
 {
     [SerializeField] private Platform[] platforms;
+    [SerializeField] private GameObject[] traps;
     [SerializeField] private GameObject ground;
 
     [SerializeField] private float spawnHeight = 10f;
     [SerializeField] private float platformSpacing = 2f;
     [SerializeField] private float platformDestroyOffset = 1f;
+    [SerializeField] private int trapSpawnChance = 1;
 
     private List<GameObject> spawnedPlatforms;
 
@@ -95,6 +98,8 @@ public class LevelGeneration : MonoBehaviour
 
                         i += platformSpacing;
 
+                        SpawnTrap();
+
                         break;
                     } 
                     else
@@ -103,6 +108,23 @@ public class LevelGeneration : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    private void SpawnTrap()
+    {
+        var randNum = Random.Range(0, 101);
+
+        if (randNum <= trapSpawnChance)
+        {
+            var spawnY = Random.Range(lastSpawnedPosition.y - 1, lastSpawnedPosition.y + 1);
+
+            var spawnWidth = screenWidth / 2f;
+            Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), spawnY);
+
+            var trapIndex = Random.Range(0, traps.Length);
+
+            Instantiate(traps[trapIndex], spawnPosition, Quaternion.identity);
         }
     }
 
